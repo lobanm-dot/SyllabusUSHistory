@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>U.S. History Syllabus Showdown</title>
+<style>
+:root{
+  --navy:#0b2239; --navy2:#123d66; --red:#9b2c2c; --cream:#f6efe1; --paper:#fffaf1;
+  --gold:#d7a948; --green:#2f7d57; --ink:#1b2430; --muted:#6f6a61; --cyan:#48c7e8;
+  --shadow:0 18px 55px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,Arial,Helvetica,sans-serif;color:var(--ink);
+background:
+radial-gradient(circle at 15% 10%,rgba(255,255,255,.55),transparent 26%),
+linear-gradient(135deg,#ccb78f,#f0e3c8 45%,#baa17a);}
+body{padding:14px}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:1200px;margin:0 auto}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 16px;
+  background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;border-radius:18px 18px 8px 8px;
+  box-shadow:var(--shadow);position:sticky;top:8px;z-index:50;border-bottom:4px solid var(--gold)
+}
+.brand{display:flex;align-items:center;gap:10px}
+.seal{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;color:var(--navy);
+border:4px solid var(--red);font-weight:1000;box-shadow:inset 0 0 0 2px #fff}
+.brand strong{display:block;letter-spacing:.8px}
+.brand small{display:block;opacity:.82;margin-top:2px}
+.scoreboard{
+  display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;justify-content:flex-end
+}
+.score-chip{
+  min-width:100px;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.22);
+  border-radius:10px;padding:6px 10px;text-align:center
+}
+.score-chip span{display:block;font-size:.66rem;letter-spacing:1.4px;text-transform:uppercase;opacity:.75}
+.score-chip b{display:block;font-size:1.25rem;color:#fff}
+.screen{display:none;min-height:76vh}
+.screen.active{display:block}
+.panel{
+  margin-top:12px;background:var(--paper);border:1px solid rgba(80,50,20,.18);border-radius:10px;
+  box-shadow:var(--shadow);overflow:hidden
+}
+.btn{
+  border:0;border-radius:12px;padding:13px 18px;font-weight:900;letter-spacing:.2px;
+  background:var(--navy);color:#fff;box-shadow:0 5px 0 #061523;transition:.15s
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 #061523}
+.btn.red{background:var(--red);box-shadow:0 5px 0 #5d1717}
+.btn.gold{background:var(--gold);color:#231a08;box-shadow:0 5px 0 #87651f}
+.btn.ghost{background:#fff;color:var(--navy);border:2px solid var(--navy);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.kicker{text-transform:uppercase;letter-spacing:3px;font-weight:1000;color:var(--red);font-size:.78rem}
+h1,h2,h3{margin:.2em 0;color:var(--navy)}
+h1{font-size:clamp(2.2rem,6vw,4.7rem);line-height:.92}
+h2{font-size:clamp(1.9rem,5vw,3.2rem)}
+p{line-height:1.5}
+
+/* INTRO */
+.intro{
+  min-height:78vh;display:grid;place-items:center;padding:34px;
+  background:
+    linear-gradient(rgba(255,250,241,.96),rgba(255,250,241,.96)),
+    repeating-linear-gradient(0deg,transparent 0 29px,rgba(11,34,57,.04) 30px)
+}
+.intro-card{max-width:850px;text-align:center;padding:26px}
+.game-badge{
+  display:inline-flex;gap:8px;align-items:center;border:2px solid var(--gold);background:#fff8df;
+  padding:7px 12px;border-radius:999px;font-weight:900;color:#6e4c08;margin-bottom:12px
+}
+.name-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0}
+.name-row input{
+  width:min(330px,90vw);padding:13px 14px;border:2px solid #cdbb98;border-radius:12px;background:#fff;font-weight:800
+}
+.rules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px auto;max-width:900px}
+.rule-card{padding:16px;border-radius:14px;background:#fff;border:2px solid #dfd1b7;text-align:left}
+.rule-card b{color:var(--red)}
+.rule-card .big{font-size:1.7rem;display:block;margin-bottom:6px}
+
+/* SYLLABUS */
+.viewer{padding:14px 14px 22px;text-align:center;background:#e8deca}
+.page-shell{
+  display:inline-block;background:#fff;padding:10px;border-radius:8px;box-shadow:0 16px 36px rgba(0,0,0,.27);
+  max-width:min(720px,96vw)
+}
+.page-shell.turn{animation:turn .38s ease}
+@keyframes turn{0%{transform:perspective(900px) rotateY(8deg) scale(.985);opacity:.6}100%{transform:none;opacity:1}}
+#syllabusImg{display:block;max-height:76vh;max-width:100%;object-fit:contain}
+.controls{display:flex;justify-content:center;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
+.page-counter{font-weight:1000;color:var(--navy);min-width:120px}
+.dots{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-top:12px}
+.dot{width:11px;height:11px;border-radius:50%;border:0;background:#b8aa91;padding:0}
+.dot.seen{background:var(--gold)} .dot.current{background:var(--red);transform:scale(1.4)}
+.unlock{
+  max-width:720px;margin:16px auto 0;padding:11px 14px;border:2px dashed var(--gold);
+  background:#fff9e8;border-radius:12px;font-weight:900;color:#5d4a1d
+}
+
+/* QUIZ */
+.quiz-wrap{max-width:940px;margin:auto;padding:26px}
+.quiz-head{text-align:center;margin-bottom:16px}
+.question-card{
+  background:#fff;border:2px solid #d9c9a8;border-radius:18px;padding:24px;box-shadow:0 10px 28px rgba(0,0,0,.12)
+}
+.qmeta{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.qnum{font-weight:1000;color:var(--red);text-transform:uppercase;letter-spacing:1.4px;font-size:.82rem}
+.bonus-tag{display:none;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,#ffe49a,var(--gold));color:#4f3706;font-weight:1000}
+.bonus-tag.show{display:inline-block}
+.qtext{font-size:clamp(1.3rem,3vw,1.9rem);font-weight:1000;color:var(--navy);margin:12px 0 18px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.answer{
+  text-align:left;border:2px solid #d7c7aa;background:#fffaf1;padding:14px;border-radius:12px;font-weight:800;
+  min-height:60px;transition:.15s
+}
+.answer:hover{border-color:var(--navy);background:#f3f7fb;transform:translateY(-1px)}
+.answer.correct{background:#e2f4e8;border-color:var(--green)}
+.answer.wrong{background:#f8dede;border-color:var(--red)}
+.answer.dim{opacity:.42}
+.feedback{margin-top:15px;padding:12px 14px;border-radius:11px;background:#f3eee4;font-weight:850;min-height:50px}
+.quiz-actions{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.base-points{font-size:.88rem;color:var(--muted);font-weight:800}
+
+/* WHEEL STAGE */
+#wheelScreen{
+  background:
+    radial-gradient(circle at 50% 30%,rgba(72,199,232,.16),transparent 30%),
+    linear-gradient(180deg,#071726,#0b2239 58%,#06111c);
+  color:#fff;min-height:80vh
+}
+.wheel-stage{max-width:1050px;margin:auto;padding:28px 20px;text-align:center}
+.wheel-stage h2{color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.35)}
+.wheel-sub{color:#cdd9e4;margin:4px 0 20px}
+.arcade-score{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:720px;margin:0 auto 20px
+}
+.arcade-box{
+  background:linear-gradient(180deg,#102f4d,#091c30);border:2px solid #2f5c83;border-radius:12px;
+  padding:10px;box-shadow:inset 0 0 22px rgba(72,199,232,.06),0 8px 22px rgba(0,0,0,.25)
+}
+.arcade-box span{display:block;font-size:.7rem;letter-spacing:2px;color:#85bfe7;text-transform:uppercase;font-weight:900}
+.arcade-box b{font-size:1.6rem;color:#fff}
+.wheel-zone{display:grid;grid-template-columns:minmax(280px,520px) minmax(230px,1fr);gap:24px;align-items:center}
+.wheel-wrap{position:relative;width:min(500px,86vw);aspect-ratio:1;margin:auto}
+.pointer{
+  position:absolute;top:-18px;left:50%;transform:translateX(-50%);z-index:8;width:0;height:0;
+  border-left:24px solid transparent;border-right:24px solid transparent;border-top:58px solid #fff;
+  filter:drop-shadow(0 4px 2px rgba(0,0,0,.45))
+}
+.wheel{
+  width:100%;height:100%;border-radius:50%;position:relative;overflow:hidden;
+  border:12px solid #f4df9c;box-shadow:0 0 0 8px #9a6e14,0 0 45px rgba(215,169,72,.35),inset 0 0 35px rgba(0,0,0,.35);
+  transition:transform 4.4s cubic-bezier(.12,.72,.08,1)
+}
+.wheel::after{
+  content:"SPIN";position:absolute;inset:38%;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle,#fff6c9,#d7a948 72%);color:#1c2630;font-weight:1000;font-size:clamp(1rem,4vw,2rem);
+  border:8px solid #7b5712;box-shadow:0 4px 16px rgba(0,0,0,.35)
+}
+.wedge{
+  position:absolute;inset:0;clip-path:polygon(50% 50%,50% 0,100% 0,100% 50%);
+  transform-origin:50% 50%
+}
+.w1{background:#1c88c9;transform:rotate(0deg)}
+.w2{background:#c73f46;transform:rotate(45deg)}
+.w3{background:#d6a329;transform:rotate(90deg)}
+.w4{background:#3a9766;transform:rotate(135deg)}
+.w5{background:#1c88c9;transform:rotate(180deg)}
+.w6{background:#c73f46;transform:rotate(225deg)}
+.w7{background:#d6a329;transform:rotate(270deg)}
+.w8{background:#3a9766;transform:rotate(315deg)}
+.label{
+  position:absolute;left:50%;top:50%;width:44%;height:30px;transform-origin:0 50%;
+  color:#fff;font-size:clamp(.9rem,2.6vw,1.4rem);font-weight:1000;text-shadow:0 2px 3px rgba(0,0,0,.55);
+}
+.l1{transform:rotate(-67.5deg) translateX(60%) rotate(67.5deg)}
+.l2{transform:rotate(-22.5deg) translateX(60%) rotate(22.5deg)}
+.l3{transform:rotate(22.5deg) translateX(60%) rotate(-22.5deg)}
+.l4{transform:rotate(67.5deg) translateX(60%) rotate(-67.5deg)}
+.l5{transform:rotate(112.5deg) translateX(60%) rotate(-112.5deg)}
+.l6{transform:rotate(157.5deg) translateX(60%) rotate(-157.5deg)}
+.l7{transform:rotate(202.5deg) translateX(60%) rotate(-202.5deg)}
+.l8{transform:rotate(247.5deg) translateX(60%) rotate(-247.5deg)}
+.wheel-side{
+  background:linear-gradient(180deg,#102f4d,#0a1d30);border:2px solid #2d5f89;border-radius:18px;padding:22px;text-align:left;
+  box-shadow:0 12px 28px rgba(0,0,0,.28)
+}
+.wheel-side h3{color:#fff;margin-top:0;font-size:1.4rem}
+.mult-list{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}
+.mult-pill{padding:10px;border-radius:10px;text-align:center;font-weight:1000;border:1px solid rgba(255,255,255,.18)}
+.m12{background:#1c88c9}.m3{background:#3a9766}.m5{background:#d6a329;color:#211500}.m10{background:#c73f46}
+.spin-result{
+  min-height:78px;padding:12px;margin:14px 0;border-radius:12px;background:#061522;border:1px solid #315c80;
+  display:grid;place-items:center;text-align:center;font-weight:900;color:#d7e7f4
+}
+.spin-result .huge{display:block;font-size:2.2rem;color:#ffe083}
+.spin-btn{width:100%;font-size:1.15rem;padding:15px}
+.wheel-next{width:100%;margin-top:10px}
+
+/* RESULTS */
+.results{max-width:900px;margin:auto;padding:32px;text-align:center}
+.final-score{
+  margin:20px auto;padding:22px;max-width:620px;border-radius:22px;
+  background:linear-gradient(135deg,var(--navy),#173f65);color:#fff;border:5px solid var(--gold);
+  box-shadow:0 16px 34px rgba(0,0,0,.22)
+}
+.final-score .labelx{text-transform:uppercase;letter-spacing:3px;color:#9cc9e7;font-weight:1000;font-size:.78rem}
+.final-score .points{font-size:clamp(3rem,9vw,6rem);font-weight:1000;line-height:1;color:#ffe29a;text-shadow:0 4px 0 rgba(0,0,0,.25)}
+.final-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:700px;margin:16px auto}
+.final-box{background:#fff;border:2px solid #d8c8a9;border-radius:14px;padding:13px}
+.final-box span{display:block;text-transform:uppercase;letter-spacing:1.4px;font-size:.68rem;color:var(--muted);font-weight:900}
+.final-box b{font-size:1.5rem;color:var(--navy)}
+.rank{font-size:1.35rem;font-weight:1000;color:var(--red);margin:12px 0}
+.student-note{max-width:700px;margin:22px auto;text-align:left}
+.student-note label{font-weight:1000;color:var(--navy);display:block;margin-bottom:7px}
+textarea{width:100%;min-height:95px;border:2px solid #cbb998;border-radius:12px;padding:11px;background:#fff}
+.summary-box{display:none;white-space:pre-wrap;text-align:left;background:#f7f1e5;border:1px solid #cdbb98;border-radius:12px;padding:13px;margin-top:12px}
+.tiny{font-size:.82rem;color:var(--muted)}
+.footer{text-align:center;padding:10px;color:#5e5548;font-size:.82rem}
+
+/* CONFETTI */
+.confetti{pointer-events:none;position:fixed;inset:0;z-index:999;overflow:hidden}
+.piece{position:absolute;top:-20px;width:9px;height:17px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(850deg)}}
+
+@media(max-width:820px){
+  body{padding:7px}.topbar{position:relative;top:0;align-items:flex-start;flex-wrap:wrap}
+  .scoreboard{width:100%;justify-content:stretch}.score-chip{flex:1}
+  .rules-grid{grid-template-columns:1fr}.answers{grid-template-columns:1fr}
+  .wheel-zone{grid-template-columns:1fr}.wheel-side{text-align:center}.mult-list{grid-template-columns:repeat(4,1fr)}
+  .final-grid{grid-template-columns:1fr 1fr}.viewer{padding:8px}#syllabusImg{max-height:68vh}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="seal">NO</div>
+      <div><strong>U.S. HISTORY SYLLABUS SHOWDOWN</strong><small>Mr. Loban • New Oxford High School</small></div>
+    </div>
+    <div class="scoreboard">
+      <div class="score-chip"><span>Player</span><b id="topPlayer">—</b></div>
+      <div class="score-chip"><span>Score</span><b id="topScore">0</b></div>
+      <div class="score-chip"><span>Correct</span><b id="topCorrect">0</b></div>
+    </div>
+  </header>
+
+  <main class="panel">
+    <section id="intro" class="screen active intro">
+      <div class="intro-card">
+        <div class="game-badge">🏆 BRAGGING RIGHTS ARE ON THE LINE</div>
+        <div class="kicker">First challenge of the year</div>
+        <h1>Syllabus Showdown</h1>
+        <p>Read the syllabus. Answer the questions. If you get one right, you earn a trip to the <b>Multiplier Wheel</b>. Your final point total is what matters.</p>
+        <div class="rules-grid">
+          <div class="rule-card"><span class="big">📖</span><b>Step 1:</b> View every syllabus page. The quiz stays locked until you do.</div>
+          <div class="rule-card"><span class="big">✅</span><b>Step 2:</b> Correct answers earn base points and unlock the wheel.</div>
+          <div class="rule-card"><span class="big">🎡</span><b>Step 3:</b> Spin for <b>1.2×, 3×, 5×, or 10×</b>. Highest total wins the bragging rights.</div>
+        </div>
+        <div class="name-row">
+          <input id="playerName" maxlength="24" placeholder="First name or classroom nickname">
+          <button class="btn red" id="openBtn">Open the Syllabus →</button>
+        </div>
+        <p class="tiny">No account. No login. Your score stays on this device unless you copy it at the end.</p>
+      </div>
+    </section>
+
+    <section id="viewer" class="screen viewer">
+      <div class="page-shell" id="pageShell"><img id="syllabusImg" src="syllabus1.png" alt="Syllabus page"></div>
+      <div class="controls">
+        <button class="btn ghost" id="prevBtn">← Back</button>
+        <div class="page-counter" id="pageCounter">Page 1</div>
+        <button class="btn" id="nextBtn">Next →</button>
+      </div>
+      <div class="dots" id="dots"></div>
+      <div class="unlock" id="unlockBox">Quiz locked: view all syllabus pages first.</div>
+    </section>
+
+    <section id="quiz" class="screen">
+      <div class="quiz-wrap">
+        <div class="quiz-head">
+          <div class="kicker">Question round</div>
+          <h2 id="roundTitle">Did You Actually Read It?</h2>
+        </div>
+        <div class="question-card">
+          <div class="qmeta">
+            <div class="qnum" id="qnum"></div>
+            <div class="bonus-tag" id="bonusTag">BONUS HISTORY • 200 PTS</div>
+          </div>
+          <div class="qtext" id="qtext"></div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback">Choose an answer.</div>
+          <div class="quiz-actions">
+            <div class="base-points" id="basePoints">Base value: 100 points</div>
+            <button class="btn" id="questionNext" disabled>Continue →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="wheelScreen" class="screen">
+      <div class="wheel-stage">
+        <div class="kicker" style="color:#ffe083">Correct answer bonus</div>
+        <h2>SPIN THE MULTIPLIER</h2>
+        <p class="wheel-sub">Whatever you land on multiplies the points from the question you just got right.</p>
+
+        <div class="arcade-score">
+          <div class="arcade-box"><span>Current Score</span><b id="wheelScore">0</b></div>
+          <div class="arcade-box"><span>Question Value</span><b id="wheelBase">100</b></div>
+          <div class="arcade-box"><span>Last Multiplier</span><b id="lastMultiplier">—</b></div>
+        </div>
+
+        <div class="wheel-zone">
+          <div class="wheel-wrap">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel">
+              <div class="wedge w1"></div><div class="wedge w2"></div><div class="wedge w3"></div><div class="wedge w4"></div>
+              <div class="wedge w5"></div><div class="wedge w6"></div><div class="wedge w7"></div><div class="wedge w8"></div>
+              <div class="label l1">1.2×</div><div class="label l2">3×</div><div class="label l3">5×</div><div class="label l4">10×</div>
+              <div class="label l5">1.2×</div><div class="label l6">3×</div><div class="label l7">5×</div><div class="label l8">10×</div>
+            </div>
+          </div>
+
+          <div class="wheel-side">
+            <h3>Multiplier Jackpot</h3>
+            <p>Correct answers get you here. Now luck gets a vote.</p>
+            <div class="mult-list">
+              <div class="mult-pill m12">1.2×</div>
+              <div class="mult-pill m3">3×</div>
+              <div class="mult-pill m5">5×</div>
+              <div class="mult-pill m10">10×</div>
+            </div>
+            <div class="spin-result" id="spinResult">Hit SPIN and see what the history gods give you.</div>
+            <button class="btn gold spin-btn" id="spinBtn">🎡 SPIN THE WHEEL</button>
+            <button class="btn wheel-next" id="wheelNext" disabled>Lock In Points →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="screen">
+      <div class="results">
+        <div class="kicker">Final scoreboard</div>
+        <h2>Bragging Rights Earned.</h2>
+        <div class="final-score">
+          <div class="labelx">Final Point Total</div>
+          <div class="points" id="finalPoints">0</div>
+          <div id="finalName">Player</div>
+        </div>
+        <div class="rank" id="rankText"></div>
+        <div class="final-grid">
+          <div class="final-box"><span>Correct</span><b id="finalCorrect">0</b></div>
+          <div class="final-box"><span>Questions</span><b id="finalTotal">0</b></div>
+          <div class="final-box"><span>Best Spin</span><b id="bestSpin">—</b></div>
+        </div>
+
+        <div class="student-note">
+          <label for="studentNote">One thing you want Mr. Loban to know about you:</label>
+          <textarea id="studentNote" placeholder="There is no wrong answer here."></textarea>
+        </div>
+
+        <div class="controls">
+          <button class="btn gold" id="copyBtn">Copy My Bragging-Rights Score</button>
+          <button class="btn ghost" id="reviewBtn">Review Syllabus</button>
+          <button class="btn red" id="retryBtn">Play Again</button>
+        </div>
+        <div id="summaryBox" class="summary-box"></div>
+        <p class="tiny">The “personal best” is stored only on this device. A true class-wide leaderboard would require a shared database or Google Form/Sheet backend.</p>
+      </div>
+    </section>
+  </main>
+  <div class="footer">U.S. History • New Oxford High School • Read it. Know it. Spin it.</div>
+</div>
+<div id="confetti" class="confetti"></div>
+
+<script>
+/*
+  syllabus4.png is intentionally skipped because syllabus5.png is the corrected grading page.
+  All other supplied syllabus images are used as provided.
+*/
+const syllabusPages=[
+  "syllabus1.png","syllabus2.png","syllabus3.png","syllabus5.png","syllabus6.png",
+  "syllabus7.png","syllabus8.png","syllabus9.png","syllabus10.png","syllabus11.png"
+];
+
+const questions=[
+{q:"What percentage of your grade comes from Assessments?",a:["25%","35%","40%","97%, because Mr. Loban enjoys suffering"],correct:2,base:100,right:"Correct. Assessments are 40% of the course grade.",wrong:"Not quite. Assessments are the biggest category at 40%."},
+{q:"Which of these belongs in the Assessment category?",a:["Projects","Daily guided notes","Summarizers","Remembering to bring Mr. Loban coffee"],correct:0,base:100,right:"Yep. Projects count in the Assessment category.",wrong:"Projects count as Assessments in this class."},
+{q:"BONUS HISTORY: Which document announced that the American colonies were separating from Great Britain?",a:["The Constitution","The Declaration of Independence","The Bill of Rights","The Gettysburg Address"],correct:1,base:200,bonus:true,right:"Still got it. Declaration of Independence.",wrong:"That was the Declaration of Independence."},
+{q:"Late work is turned in while the class is STILL in that unit. What is the highest grade it can earn?",a:["100%","90%","50%","Whatever I can negotiate in the hallway"],correct:1,base:100,right:"Exactly. Late work during the unit can earn up to 90%.",wrong:"The cap is 90% when late work is submitted during the unit."},
+{q:"You wait until AFTER the unit ends to turn in missing work. What is the maximum?",a:["90%","75%","50%","A heartfelt apology and 100%"],correct:2,base:100,right:"Correct. Once the unit is over, the maximum is 50%.",wrong:"After the unit ends, late work is capped at 50%."},
+{q:"You walk into U.S. History. Where should your cell phone be?",a:["On the desk, face down","In my lap where surely nobody notices","Away and out of sight","I'm just checking the time, Mr. Loban!"],correct:2,base:100,right:"Correct. The classroom is a Red Zone: away and out of sight.",wrong:"Red Zone means the phone is away and out of sight."},
+{q:"BONUS HISTORY: Which purchase roughly doubled the size of the United States in 1803?",a:["Alaska Purchase","Louisiana Purchase","Gadsden Purchase","Florida Purchase"],correct:1,base:200,bonus:true,right:"Louisiana Purchase. Thomas Jefferson approves.",wrong:"The Louisiana Purchase roughly doubled the size of the U.S."},
+{q:"Your iPad is best described as…",a:["A personal streaming device","A learning tool used as directed by the teacher","Whatever I want if I'm quiet","A very expensive cafeteria tray"],correct:1,base:100,right:"Exactly. The iPad is a classroom learning tool.",wrong:"The iPad is a learning tool used as directed."},
+{q:"Mr. Loban gives an assignment a Level 0 on the AI Scale. What does that mean?",a:["AI can brainstorm","No AI","AI can write it if I change a few words","AI can do it if I ask politely"],correct:1,base:100,right:"Correct. Level 0 means no AI.",wrong:"Level 0 is the no-AI level."},
+{q:"At Level 1, AI may help you…",a:["Brainstorm and generate ideas","Complete the whole assignment","Take the assessment for you","Replace your thinking entirely"],correct:0,base:100,right:"Right. Level 1 is brainstorming and idea generation.",wrong:"Level 1 is for brainstorming and generating ideas."},
+{q:"BONUS HISTORY: Who was president when the Civil War began?",a:["George Washington","Andrew Jackson","Abraham Lincoln","Ulysses S. Grant"],correct:2,base:200,bonus:true,right:"Abraham Lincoln. Civil War memory intact.",wrong:"Abraham Lincoln was president when the Civil War began."},
+{q:"Who has the final say when it comes to your grade?",a:["ChatGPT","A mysterious grading robot","Mr. Loban","The loudest person in the room"],correct:2,base:100,right:"Correct. AI may assist, but Mr. Loban makes the final grading decision.",wrong:"Mr. Loban is the final say on grades."},
+{q:"True or False: Mr. Loban may use AI to help create materials, assist with grading, and provide feedback.",a:["True","False"],correct:0,base:100,right:"True. AI can assist the teacher, but it does not replace professional judgment.",wrong:"This is true. AI may assist with creating, grading, and feedback."},
+{q:"Does AI alone determine your grade?",a:["Yes","No"],correct:1,base:100,right:"Correct. You will not be assessed only by AI.",wrong:"No. Grades reflect your work plus Mr. Loban's professional judgment."},
+{q:"BONUS HISTORY: The Three-Fifths Compromise dealt primarily with how enslaved people would be counted for…",a:["Representation and taxation","Military service","Voting rights","Land ownership"],correct:0,base:200,bonus:true,right:"Correct. Representation and taxation.",wrong:"It dealt with counting enslaved people for representation and taxation."},
+{q:"What is the BEST move when you do not understand something?",a:["Sit silently and hope it disappears","Ask questions and advocate for yourself","Pack up early","Ask someone else who is equally confused"],correct:1,base:100,right:"Exactly. Ask questions, seek help, and advocate for yourself.",wrong:"The expectation is to ask questions and advocate for yourself."},
+{q:"Which equation best describes success in this class?",a:["Talent + Luck = Success","Perfect Grades + No Mistakes = Success","Effort + Attitude + Consistency = Success","Copy + Paste = Success"],correct:2,base:100,right:"Correct. Effort + Attitude + Consistency = Success.",wrong:"Success is built on effort, attitude, and consistency."},
+{q:"How long has Mr. Loban been teaching history?",a:["4 years","10 years","18 years","Since the Gilded Age"],correct:2,base:100,right:"Correct: 18 years.",wrong:"18 years. Not quite since the Gilded Age."},
+{q:"According to the final page, you DON'T have to…",a:["Come to class","Put in effort","Ask questions","Love history on Day 1"],correct:3,base:100,right:"Exactly. You don't have to love history on Day 1. You do have to show up and give it a chance.",wrong:"You do not have to love history on Day 1."}
+];
+
+const screens=["intro","viewer","quiz","wheelScreen","results"].reduce((o,id)=>(o[id]=document.getElementById(id),o),{});
+let player="Player",currentPage=0,seen=new Set(),qIndex=0,score=0,correctCount=0;
+let pendingBase=0,pendingMultiplier=null,spinning=false,wheelRotation=0,bestMultiplier=0;
+
+function show(id){
+  Object.values(screens).forEach(s=>s.classList.remove("active"));
+  screens[id].classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function updateTop(){
+  document.getElementById("topPlayer").textContent=player;
+  document.getElementById("topScore").textContent=Math.round(score).toLocaleString();
+  document.getElementById("topCorrect").textContent=correctCount;
+}
+function buildDots(){
+  const box=document.getElementById("dots");box.innerHTML="";
+  syllabusPages.forEach((_,i)=>{
+    const b=document.createElement("button");b.className="dot";
+    b.onclick=()=>{currentPage=i;renderPage()};box.appendChild(b);
+  });
+}
+function renderPage(){
+  const img=document.getElementById("syllabusImg"),shell=document.getElementById("pageShell");
+  img.src=syllabusPages[currentPage];img.alt=`Syllabus page ${currentPage+1}`;
+  shell.classList.remove("turn");void shell.offsetWidth;shell.classList.add("turn");
+  seen.add(currentPage);
+  document.getElementById("pageCounter").textContent=`Page ${currentPage+1} of ${syllabusPages.length}`;
+  document.getElementById("prevBtn").disabled=currentPage===0;
+  const all=seen.size===syllabusPages.length;
+  document.getElementById("nextBtn").textContent=currentPage===syllabusPages.length-1&&all?"Start the Showdown →":"Next →";
+  [...document.querySelectorAll(".dot")].forEach((d,i)=>{
+    d.classList.toggle("seen",seen.has(i));d.classList.toggle("current",i===currentPage)
+  });
+  document.getElementById("unlockBox").textContent=all
+    ?"Quiz unlocked. You viewed every syllabus page. Time to play."
+    :`Quiz locked: ${syllabusPages.length-seen.size} page${syllabusPages.length-seen.size===1?"":"s"} left to view.`;
+}
+function renderQuestion(){
+  const q=questions[qIndex];
+  document.getElementById("qnum").textContent=`Question ${qIndex+1} of ${questions.length}`;
+  document.getElementById("qtext").textContent=q.q.replace("BONUS HISTORY: ","");
+  document.getElementById("basePoints").textContent=`Base value: ${q.base} points`;
+  document.getElementById("roundTitle").textContent=q.bonus?"8th Grade History Bonus":"Did You Actually Read It?";
+  document.getElementById("bonusTag").classList.toggle("show",!!q.bonus);
+  const box=document.getElementById("answers");box.innerHTML="";
+  q.a.forEach((txt,i)=>{
+    const b=document.createElement("button");b.className="answer";b.textContent=txt;
+    b.onclick=()=>answer(i,b);box.appendChild(b);
+  });
+  document.getElementById("feedback").textContent="Choose an answer.";
+  document.getElementById("questionNext").disabled=true;
+  document.getElementById("questionNext").textContent="Continue →";
+}
+function answer(i,clicked){
+  const q=questions[qIndex];
+  const buttons=[...document.querySelectorAll(".answer")];
+  buttons.forEach((b,idx)=>{b.disabled=true;if(idx===q.correct)b.classList.add("correct");else if(idx===i)b.classList.add("wrong");else b.classList.add("dim")});
+  if(i===q.correct){
+    correctCount++;pendingBase=q.base;
+    document.getElementById("feedback").textContent=q.right+" Wheel unlocked!";
+    document.getElementById("questionNext").textContent="Go to Multiplier Wheel →";
+  }else{
+    pendingBase=0;
+    document.getElementById("feedback").textContent=q.wrong+" No wheel spin this round.";
+    document.getElementById("questionNext").textContent=qIndex===questions.length-1?"See Final Score →":"Next Question →";
+  }
+  updateTop();
+  document.getElementById("questionNext").disabled=false;
+}
+function nextAfterQuestion(){
+  if(pendingBase>0){
+    prepareWheel();show("wheelScreen");
+  }else{
+    advanceQuestion();
+  }
+}
+function prepareWheel(){
+  pendingMultiplier=null;spinning=false;
+  document.getElementById("wheelScore").textContent=Math.round(score).toLocaleString();
+  document.getElementById("wheelBase").textContent=pendingBase.toLocaleString();
+  document.getElementById("lastMultiplier").textContent="—";
+  document.getElementById("spinResult").innerHTML="Hit SPIN and see what the history gods give you.";
+  document.getElementById("spinBtn").disabled=false;
+  document.getElementById("wheelNext").disabled=true;
+}
+const segmentMultipliers=[1.2,3,5,10,1.2,3,5,10];
+function spinWheel(){
+  if(spinning)return;
+  spinning=true;document.getElementById("spinBtn").disabled=true;
+  // Choose an outcome first, then visually land that segment beneath the top pointer.
+  const idx=Math.floor(Math.random()*segmentMultipliers.length);
+  const mult=segmentMultipliers[idx];
+  const segmentCenter=idx*45+22.5;
+  const extraSpins=5+Math.floor(Math.random()*3);
+  const target=extraSpins*360 + (360 - segmentCenter);
+  wheelRotation += target;
+  const wheel=document.getElementById("wheel");
+  wheel.style.transform=`rotate(${wheelRotation}deg)`;
+  setTimeout(()=>{
+    pendingMultiplier=mult;bestMultiplier=Math.max(bestMultiplier,mult);
+    const earned=Math.round(pendingBase*mult);
+    document.getElementById("lastMultiplier").textContent=mult+"×";
+    document.getElementById("spinResult").innerHTML=`<span><span class="huge">${mult}×</span>${pendingBase} × ${mult} = <b>${earned.toLocaleString()} points</b></span>`;
+    document.getElementById("wheelNext").textContent=`Add ${earned.toLocaleString()} Points →`;
+    document.getElementById("wheelNext").disabled=false;
+    burst();
+  },4450);
+}
+function lockPoints(){
+  if(pendingMultiplier==null)return;
+  score += Math.round(pendingBase*pendingMultiplier);
+  pendingBase=0;updateTop();advanceQuestion();
+}
+function advanceQuestion(){
+  if(qIndex<questions.length-1){
+    qIndex++;show("quiz");renderQuestion();
+  }else{
+    showResults();
+  }
+}
+function showResults(){
+  show("results");
+  updateTop();
+  document.getElementById("finalPoints").textContent=Math.round(score).toLocaleString();
+  document.getElementById("finalName").textContent=player;
+  document.getElementById("finalCorrect").textContent=correctCount;
+  document.getElementById("finalTotal").textContent=questions.length;
+  document.getElementById("bestSpin").textContent=bestMultiplier?bestMultiplier+"×":"—";
+  let rank=score>=7000?"LEGENDARY STATUS"
+          :score>=4500?"HISTORY HIGH ROLLER"
+          :score>=2800?"SYLLABUS SHARK"
+          :score>=1600?"SOLID CONTENDER"
+          :"THE WHEEL WAS NOT KIND";
+  const oldBest=Number(localStorage.getItem("lobanSyllabusBest")||0);
+  const isBest=score>oldBest;
+  if(isBest)localStorage.setItem("lobanSyllabusBest",String(score));
+  document.getElementById("rankText").textContent=isBest?`${rank} • NEW DEVICE HIGH SCORE!`:rank;
+  confetti(110);
+}
+function resetGame(){
+  qIndex=0;score=0;correctCount=0;pendingBase=0;pendingMultiplier=null;bestMultiplier=0;
+  updateTop();show("quiz");renderQuestion();
+}
+function burst(){confetti(34)}
+function confetti(n){
+  const c=document.getElementById("confetti"),colors=["#48c7e8","#d7a948","#9b2c2c","#3a9766","#ffffff"];
+  for(let i=0;i<n;i++){
+    const p=document.createElement("span");p.className="piece";p.style.left=Math.random()*100+"vw";
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration=(2+Math.random()*2.5)+"s";p.style.animationDelay=(Math.random()*.4)+"s";
+    c.appendChild(p);setTimeout(()=>p.remove(),5200);
+  }
+}
+
+document.getElementById("openBtn").onclick=()=>{
+  player=document.getElementById("playerName").value.trim()||"Player";
+  updateTop();buildDots();currentPage=0;show("viewer");renderPage();
+};
+document.getElementById("prevBtn").onclick=()=>{if(currentPage>0){currentPage--;renderPage()}};
+document.getElementById("nextBtn").onclick=()=>{
+  if(currentPage<syllabusPages.length-1){currentPage++;renderPage();return}
+  if(seen.size===syllabusPages.length){qIndex=0;show("quiz");renderQuestion()}
+  else{
+    const missing=[...Array(syllabusPages.length).keys()].find(i=>!seen.has(i));
+    if(missing!==undefined){currentPage=missing;renderPage()}
+  }
+};
+document.getElementById("questionNext").onclick=nextAfterQuestion;
+document.getElementById("spinBtn").onclick=spinWheel;
+document.getElementById("wheelNext").onclick=lockPoints;
+document.getElementById("reviewBtn").onclick=()=>{currentPage=0;show("viewer");renderPage()};
+document.getElementById("retryBtn").onclick=resetGame;
+document.getElementById("copyBtn").onclick=async()=>{
+  const note=document.getElementById("studentNote").value.trim()||"(No note entered)";
+  const summary=`U.S. History Syllabus Showdown
+Player: ${player}
+Final Score: ${Math.round(score).toLocaleString()} points
+Correct: ${correctCount}/${questions.length}
+Best Multiplier: ${bestMultiplier?bestMultiplier+"×":"—"}
+One thing I want Mr. Loban to know:
+${note}`;
+  const box=document.getElementById("summaryBox");box.textContent=summary;box.style.display="block";
+  try{await navigator.clipboard.writeText(summary);document.getElementById("copyBtn").textContent="Copied!";setTimeout(()=>document.getElementById("copyBtn").textContent="Copy My Bragging-Rights Score",1600)}
+  catch(e){document.getElementById("copyBtn").textContent="Score Shown Below"}
+};
+document.addEventListener("keydown",e=>{
+  if(screens.viewer.classList.contains("active")){
+    if(e.key==="ArrowRight")document.getElementById("nextBtn").click();
+    if(e.key==="ArrowLeft")document.getElementById("prevBtn").click();
+  }
+});
+</script>
+</body>
+</html>
